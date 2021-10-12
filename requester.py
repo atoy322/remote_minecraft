@@ -23,13 +23,23 @@ def createRequestBody(command, *args):
     }
     return json.dumps(REQUEST_BODY)
 
-ws = WebSocketServer(8000)
-ws.accept()
+class RequestContext(WebSocketServer):
+    def __init__(self):
+        super().__init__(8000)
 
-while True:
-    command, args = input("Command: ").split(" ", 1)
-    request_body = createRequestBody(command, *args.split(" "))
-    ws.send(request_body)
-    response = ws.recv().decode()
-    response = json.loads(response)
-    print(response["body"]["statusMessage"])
+    def request(command, *args):
+        request_body = createRequestBody(command, *args)
+        self.send(request_body)
+        response = self.recv().decode()
+        return json.loads(response)
+
+
+if __name__ == "__main__":
+    rc = RequestContext()
+    print("Waiting for connection...")
+    rc.accept()
+
+    while True:
+        response = rc.request("summon", "tnt", "~~~")
+        print(response)
+
