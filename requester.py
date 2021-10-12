@@ -23,7 +23,7 @@ def createRequestBody(command, *args):
     }
     return json.dumps(REQUEST_BODY)
 
-class RequestContext(WebSocketServer):
+class CommandRequester(WebSocketServer):
     def __init__(self):
         super().__init__(8000)
 
@@ -35,7 +35,7 @@ class RequestContext(WebSocketServer):
 
 
 if __name__ == "__main__":
-    rc = RequestContext()
+    rc = CommandRequester()
     print("Waiting for connection...")
     rc.accept()
 
