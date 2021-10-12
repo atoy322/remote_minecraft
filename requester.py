@@ -27,7 +27,7 @@ class CommandRequester(WebSocketServer):
     def __init__(self):
         super().__init__(8000)
 
-    def request(command, *args):
+    def request(self, command, *args):
         request_body = createRequestBody(command, *args)
         self.send(request_body)
         response = self.recv().decode()
@@ -35,11 +35,11 @@ class CommandRequester(WebSocketServer):
 
 
 if __name__ == "__main__":
-    rc = CommandRequester()
+    cr = CommandRequester()
     print("Waiting for connection...")
-    rc.accept()
+    cr.accept()
 
     while True:
-        response = rc.request("summon", "tnt", "~~~")
+        response = cr.request("summon", "tnt", "~~~")
         print(response)
 
